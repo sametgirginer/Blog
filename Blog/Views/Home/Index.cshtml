@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Ana sayfa";
+    Layout = "~/Views/Shared/Genel.cshtml";
+
+}
+
+@using (Blog.DAL.BlogEntities db = new Blog.DAL.BlogEntities())
+{
+    var Konular = db.Konu.ToList().OrderByDescending(t => t.Tarih).Take(9);
+    var OneCikarilanKonular = db.Konu.Where(k => k.OneCikar == 1).ToList();
+    var OneCikarilanKonuSayisi = Konular.Where(k => k.OneCikar == 1).Count();
+    var active = "active";
+
+    if (OneCikarilanKonuSayisi > 0)
+    {
+        <div class="slider">
+            <div id="onecikarilanslider" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    @{active = "active";}
+                    @foreach (var sliderkonu in OneCikarilanKonular)
+                    {
+
+                        <div class="carousel-item @active">
+                            <img class="d-block w-100" src="@sliderkonu.Resim" alt="@sliderkonu.Baslik">
+                            <div class="carousel-caption d-none d-md-block">
+                                <a href="/konu?id=@sliderkonu.ID"><h4>@sliderkonu.Baslik</h4></a>
+                                @{active = "";}
+                            </div>
+                        </div>
+                    }
+                </div>
+                <a class="carousel-control-prev" href="#onecikarilanslider" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Geri</span>
+                </a>
+                <a class="carousel-control-next" href="#onecikarilanslider" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">İleri</span>
+                </a>
+            </div>
+        </div>
+    }
+
+    foreach (var konu in Konular)
+    {
+
+        <div class="makale">
+            <div class="card mb-3">
+                @if (@konu.Resim != null)
+                {
+                    <img class="card-img" src="@konu.Resim" alt="@konu.Baslik">
+                }
+                <div class="card-body">
+                    <h5>@Html.ActionLink(konu.Baslik, "Konu", "Home", new { id = konu.ID })</h5>
+                    <hr />
+                    <p class="card-text">
+                        @{
+                            string htmlsiz = Blog.Filters.HTMLTemizle.Replace(konu.Icerik);
+
+                            if (htmlsiz.Length >= 500) {
+                                @Html.Raw(htmlsiz.Substring(0, 500));
+                            }
+                            else
+                            {
+                                @Html.Raw(htmlsiz);
+                            }
+                        }
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <p class="card-text float-left text-muted">
+                        @konu.Tarih.Day/@konu.Tarih.Month/@konu.Tarih.Year tarihinde @konu.Uye.Ad @konu.Uye.Soyad tarafından yazıldı.
+                    </p>
+                    @Html.ActionLink("Devamını oku...", "Konu", "Home", new { id = konu.ID }, new { @class = "btn btn-primary float-right" })
+                </div>
+            </div>
+        </div>
+    }
+}

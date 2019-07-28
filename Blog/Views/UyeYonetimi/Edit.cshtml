@@ -1,0 +1,98 @@
+﻿@model Blog.DAL.Uye
+
+@{
+    ViewBag.Title = "Üye Bilgilerini Düzenle";
+    Layout = "~/Views/Shared/Yonetim.cshtml";
+}
+
+<div class="listarka">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Üye Bilgilerini Düzenle</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.ID)
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.EPosta, new { htmlAttributes = new { @class = "form-control", @placeholder = "E-Posta Adresi", @aria_label = "E-Posta Adresi", @type = "email", aria_describedby = "emailHelp", required = "" } })
+                                @Html.ValidationMessageFor(model => model.EPosta, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.Sifre, new { htmlAttributes = new { @class = "form-control", @placeholder = "Şifre", @aria_label = "Şifre", required = "" } })
+                                @Html.ValidationMessageFor(model => model.Sifre, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.Ad, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ad", @aria_label = "Üye Adı", required = "" } })
+                                @Html.ValidationMessageFor(model => model.Ad, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.Soyad, new { htmlAttributes = new { @class = "form-control", @placeholder = "Soyad", @aria_label = "Üye Soyadı", required = "" } })
+                                @Html.ValidationMessageFor(model => model.Soyad, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user-astronaut"></i></span>
+                                </div>
+                                <select class="form-control" id="Yetki" name="Yetki">
+                                    <option value="0">Kullanıcı</option>
+                                    <option value="1">Yönetici</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-secondary">Kaydet</button>
+            </div>
+        </div>
+    }
+    <hr />
+    <p>@Html.ActionLink("Kategori Listesine Dön", "Index", new { @area = "" }, new { @class = "btn btn-dark" })</p>
+</div>

@@ -1,0 +1,164 @@
+﻿/* Font Import */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&subset=latin-ext');
+
+/* Genel */
+body {
+    font-family: 'Montserrat', sans-serif !important;
+    background: #f7f7f7 !important;
+}
+a:hover {text-decoration: none !important}
+
+/* Header - Navbar */
+.navbar {
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 50px
+}
+
+.navbar .logo {
+    height: 50px;
+    max-width: 150px;
+    padding-right: 15px
+}
+
+.navbar .nav-link {font-weight: 500}
+
+.navbar .nav-item {
+    background: rgba(0, 0, 0, 0.30);
+    border-radius: 5px;
+    margin-left: 10px;
+    padding: 0 10px;
+}
+
+.navbar-dark .navbar-nav .nav-link {color: #fff !important}
+.navbar-dark .navbar-nav .nav-link:hover {color: #00f1ff !important}
+
+/* Sidebar */
+.sidebar {margin-bottom: 20px}
+
+.sidebar .baslik {
+    background: #343a40;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+}
+
+.sidebar h4 {
+    color: #fff;
+    margin-bottom: 0;
+    font-size: 20px
+}
+
+.sidebar .baslik i {margin: 0 10px 0 5px}
+.sidebar .icerik a {color: #535353}
+.sidebar .icerik a:hover {color: #589ff9}
+
+.arsiv .yillar {background: #f6f2f2}
+.arsiv .aylar a {padding-left: 20px}
+
+/* Ana sayfa Bölümü 
+   Slider - Makaleler
+*/
+.carousel-inner {
+    height: 300px;
+    border-radius: 10px
+}
+
+.carousel-inner .w-100 {height: 300px}
+.slider {margin-bottom: 30px}
+
+.slider h4 {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    padding: 10px;
+    display: ruby;
+    color: #fff;
+    font-size: 16px;
+}
+
+.makale {margin-bottom: 35px}
+
+.makale .card-img {
+    max-height: 300px;
+    border-radius: 0px
+}
+
+.makale .card-text {
+    color: #555555;
+    font-size: 15px;
+}
+
+.makale .card-footer p {padding-top: 5px}
+
+/* Form:
+    Giriş - Kayıt
+*/
+.formarka {
+    background: #fff;
+    padding: 25px;
+    border-radius: 5px
+}
+
+.formarka form {
+    background: #fff;
+    padding: 25px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    box-shadow: 0 0 2px 1px #dcdcdc;
+}
+
+
+/* Footer */
+.footer {
+    background: #343a40;
+    margin-top: 50px;
+    border-radius: 10px 10px 0 0;
+    bottom: 0;
+    padding: 30px 30px 0 30px;
+}
+
+.footer .navbar-nav {
+    background: rgba(0, 0, 0, 0.36);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.footer .nav-item {margin-left: 15px}
+.footer .nav-item i {margin-right: 8px}
+.footer .nav-item a {color: #fff}
+.footer .nav-item a:hover {
+    color: #2f97ff;
+    margin-left: 5px
+}
+
+.footer .alt {
+    margin-top: 20px;
+    border-radius: 10px;
+    color: #b5b4b4
+}
+
+.footer .alt a {color: #fff}
+
+/* Admin */
+.admin.navbar {margin-bottom: 0 !important}
+
+.admin-alt {
+    width: 90%;
+    margin: 0 auto 50px auto;
+}
+
+.admin-alt .navbar-nav {margin: auto}
+.admin-alt .dropdown {padding: 0 5px 0 5px}
+
+.listarka {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px
+}
+
+.table td, .table th {text-align: center}
+
+/* Düzeltmeler */
+.list-group-item:first-child {
+    border-radius: 0 !important
+}

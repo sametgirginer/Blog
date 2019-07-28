@@ -1,0 +1,33 @@
+﻿@model Blog.DAL.Kategori
+
+@{
+    ViewBag.Title = "Kategoriyi Sil";
+    Layout = "~/Views/Shared/Yonetim.cshtml";
+}
+
+<div class="listarka">
+    <h4>Kategoriyi silmek istediğinizden emin misiniz?</h4>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Kategori Adı</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">@Html.DisplayFor(modelItem => Model.ID)</th>
+                <td>@Html.DisplayFor(modelItem => Model.Ad)</td>
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <td><input type="submit" value="Sil" class="btn btn-danger" /></td>
+                }
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        @Html.ActionLink("Kategori Listesine Dön", "Index", new { @area = "" }, new { @class = "btn btn-dark" })
+    </p>
+</div>

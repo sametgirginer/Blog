@@ -1,0 +1,253 @@
+﻿@using Blog.Filters;
+@{
+    if (Session["giris"] != null)
+    {
+        var uye = (Blog.DAL.Uye)Session["giris"];
+        ViewBag.UyeAd = uye.Ad;
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - Kişisel Blog</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="~/Content/main.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <img src="~/Images/logo.png" class="logo" />
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        @Html.ActionLink("Ana sayfa", "Index", "Home", new { area = "" }, new { @class = "nav-link" })
+                        <span class="sr-only">(current)</span>
+                    </li>
+                </ul>
+                <ul class="navbar-nav justify-content-end">
+                    @if (Session["giris"] == null)
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Giriş", "Giris", "Home", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Kayıt Ol", "Kayit", "Home", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                    }
+                    else
+                    {
+                        var uye = (Blog.DAL.Uye)Session["giris"];
+                        if (Yetki.Kontrol(uye.ID))
+                        {
+                        <li class="nav-item">
+                            @Html.ActionLink("Yönetim Paneli", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Hoşgeldin, @uye.Ad</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            @Html.ActionLink("Çıkış", "Index", "Cikis", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-8">
+                <div class="col-md-12">
+                    @RenderBody()
+                </div>
+            </div>
+            <div class="col-md-4">
+
+                <div class="col-md-12">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Aramak istediğinizi yazın..." aria-label="Aramak istediğinizi yazın..." aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-info" type="button" id="button-addon2">ARA</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 sidebar">
+                    <div class="baslik">
+                        <h4><i class="fas fa-align-justify"></i>Kategoriler</h4>
+                    </div>
+                    <div class="icerik">
+                        <ul class="list-group">
+                            @using (Blog.DAL.BlogEntities db = new Blog.DAL.BlogEntities())
+                            {
+                                foreach (var kategori in db.Kategori.ToList())
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        @Html.ActionLink(kategori.Ad, "KategoriKonuListele", new { id = kategori.ID })
+                                        <span class="badge badge-primary badge-pill">@db.Konu.Count(h => h.KategoriID == kategori.ID).ToString()</span>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-12 sidebar">
+                    <div class="baslik">
+                        <h4><i class="fas fa-align-justify"></i>Arşiv</h4>
+                    </div>
+                    <div class="icerik arsiv">
+                        <ul class="list-group">
+                            @using (Blog.DAL.BlogEntities db = new Blog.DAL.BlogEntities())
+                            {
+                                foreach (var yil in db.Konu.Select(y => y.Tarih.Year).Distinct().ToList())
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center yillar">
+                                        @yil.ToString()
+                                        <span class="badge badge-primary badge-pill">@db.Konu.Count(y => y.Tarih.Year == yil).ToString()</span>
+                                    </li>
+
+                                    foreach (var ay in db.Konu.Where(y => y.Tarih.Year == yil).Select(a => a.Tarih.Month).Distinct().ToList())
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between align-items-center aylar">
+                                            <a href="@Url.Action("TarihKonuListele", "Home", new { yil = yil, ay = ay} )">
+                                                @switch (ay)
+                                                {
+                                                    case 1:
+                                                        @ay.ToString("Ocak");
+                                                        break;
+                                                    case 2:
+                                                        @ay.ToString("Şubat");
+                                                        break;
+                                                    case 3:
+                                                        @ay.ToString("Mart");
+                                                        break;
+                                                    case 4:
+                                                        @ay.ToString("Nisan");
+                                                        break;
+                                                    case 5:
+                                                        @ay.ToString("Mayıs");
+                                                        break;
+                                                    case 6:
+                                                        @ay.ToString("Haziran");
+                                                        break;
+                                                    case 7:
+                                                        @ay.ToString("Temmuz");
+                                                        break;
+                                                    case 8:
+                                                        @ay.ToString("Ağustos");
+                                                        break;
+                                                    case 9:
+                                                        @ay.ToString("Eylül");
+                                                        break;
+                                                    case 10:
+                                                        @ay.ToString("Ekim");
+                                                        break;
+                                                    case 11:
+                                                        @ay.ToString("Kasım");
+                                                        break;
+                                                    case 12:
+                                                        @ay.ToString("Aralık");
+                                                        break;
+                                                }
+                                            </a>
+                                            <span class="badge badge-primary badge-pill">@db.Konu.Count(k => k.Tarih.Year == yil && k.Tarih.Month == ay).ToString()</span>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="footer">
+            <div class="col-md-12">
+                <div class="row justify-content-md-center">
+                    <div class="col-md-4">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Ana sayfa</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Kategoriler</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Son Yazılar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Arşiv</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Arşiv</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Haberler</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Yeniler</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Haberler</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Yeniler</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-angle-double-right"></i>Haberler</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fab fa-facebook-square"></i>Facebook</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fab fa-twitter-square"></i>Twitter</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fab fa-instagram"></i>Instagram</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fab fa-pinterest-square"></i>Pinterest</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fab fa-google-plus-square"></i>Google+</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row justify-content-md-center">
+                        <div class="alt">
+                            <p>Copyright &copy; @DateTime.Now.Year <a href="#">Site Adı</a> &copy; tüm hakları saklıdır.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Content/jquery-3.3.1.min.js"></script>
+    <script src="~/Content/bootstrap.min.js"></script>
+</body>
+</html>
